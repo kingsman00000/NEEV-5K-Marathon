@@ -5,9 +5,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Carousel } from "./carousel"
 import { TestimonialCard } from "./testimonial-card"
 import UploadPhoto from "./UploadPhoto";
+import MarathonRegistration from "./MarathonRegistration"; // ✅ Import MarathonRegistration component
+import BibCreator from "./BibCreator" // ✅ Import BibCreator component
 
 export default function Page() {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false); // ✅ State for Registration Modal
+  const [isBibOpen, setIsBibOpen] = useState(false) // ✅ State for BibCreator Modal
   return (
     <div className="min-h-screen bg-gray-50">
        {/* Header */}
@@ -32,6 +36,7 @@ export default function Page() {
             </nav>
             <Button 
               className="bg-purple-600 hover:bg-purple-700 text-white"
+              onClick={() => setIsRegisterOpen(true)} // ✅ Open Register Modal
             >
               Register Now
             </Button>
@@ -57,11 +62,12 @@ export default function Page() {
             <h2 className="text-5xl font-bold mb-4 text-center">Ladkiyaan Bhaage, Sabse Aage</h2>
             <p className="text-2xl mb-8">8th March, 2025</p>
             <Button 
-            size="lg" 
-            className="bg-purple-600 hover:bg-purple-700 text-white"
-          >
-            Join the Movement
-          </Button>
+              size="lg" 
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+              onClick={() => setIsRegisterOpen(true)} // ✅ Open Register Modal
+            >
+              Join the Movement
+            </Button>
           </div>
         </section>
 
@@ -121,21 +127,60 @@ export default function Page() {
                   <p className="mb-4 text-gray-600">
                     Sign up for the NEEV 5K Marathon and be part of this empowering event.
                   </p>
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">Register</Button>
+                  <Button 
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    onClick={() => setIsRegisterOpen(true)} // ✅ Open Register Modal
+                  >
+                    Register
+                  </Button>
                 </CardContent>
               </Card>
-              <Card className="bg-white">
+               {/* Registration Modal */}
+        {isRegisterOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
+              <button 
+                className="absolute top-24 right-12 text-gray-600 hover:text-gray-900 text-3xl w-16 h-16 flex items-center justify-center rounded-full hover:bg-gray-200"
+                onClick={() => setIsRegisterOpen(false)} // ✅ Close Register Modal
+              >
+                ✕
+              </button>
+              <MarathonRegistration /> {/* ✅ Render Registration Component */}
+            </div>
+          </div>
+        )}
+
+             {/* Open BibCreator Modal */}
+             <Card className="bg-white">
                 <CardContent className="pt-6">
                   <h3 className="text-xl font-semibold mb-2 text-gray-800">Grab Your BIB</h3>
                   <p className="mb-4 text-gray-600">Pick up your race number and get ready for the big day!</p>
                   <Button
                     variant="outline"
                     className="w-full border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white"
+                    onClick={() => setIsBibOpen(true)} // ✅ Open BibCreator Modal
                   >
                     BIB Information
                   </Button>
                 </CardContent>
               </Card>
+
+
+      {/* BIB Creator Modal */}
+      {isBibOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
+            <button 
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-3xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200"
+              onClick={() => setIsBibOpen(false)}
+            >
+              ✕
+            </button>
+            <BibCreator /> {/* ✅ Render BibCreator component */}
+          </div>
+        </div>
+      )}
+
               <Card className="bg-white">
               <CardContent className="pt-6">
                 <h3 className="text-xl font-semibold mb-2 text-gray-800">Upload 5K Pics</h3>
@@ -152,6 +197,7 @@ export default function Page() {
             </div>
           </div>
         </section>
+        
 
       {/* Upload Photo Section (Appears when isUploadOpen is true) */}
       {isUploadOpen && (
