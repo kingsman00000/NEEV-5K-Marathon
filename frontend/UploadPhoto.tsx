@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, CheckCircle2, Camera } from 'lucide-react';
+import { IP_ADDR, PORT } from './parameters';
 
 function UploadPhoto() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -35,11 +37,27 @@ function UploadPhoto() {
     }
   }, []);
 
-  const handleUpload = (file: File) => {
-    // Simulate upload delay
-    setTimeout(() => {
+  const handleUpload = async (file: File) => {
+    setError(null);
+    const formData = new FormData();
+    formData.append("image", file);
+    
+    try {
+      const response = await fetch(`http://${IP_ADDR}:${PORT}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+      
+      const data = await response.json();
+      console.log("Upload success:", data);
       setUploadSuccess(true);
-    }, 1500);
+    } catch (err) {
+      setError("Upload failed. Please try again.");
+    }
   };
 
   if (uploadSuccess) {
@@ -50,9 +68,7 @@ function UploadPhoto() {
             <CheckCircle2 className="w-16 h-16 text-green-500" />
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Thank You!</h2>
-          <p className="text-gray-600">
-            Your marathon photo has been successfully uploaded. We appreciate you sharing your achievement with us!
-          </p>
+          <p className="text-gray-600">Your marathon photo has been successfully uploaded.</p>
           <button
             onClick={() => {
               setUploadSuccess(false);
@@ -80,17 +96,12 @@ function UploadPhoto() {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`
-            border-2 border-dashed rounded-lg p-8 text-center transition-colors
-            ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}
-          `}
+          className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
         >
           <Upload className="w-10 h-10 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 mb-2">Drag and drop your photo here, or</p>
           <label className="inline-block">
-            <span className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-              Browse Files
-            </span>
+            <span className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">Browse Files</span>
             <input
               type="file"
               className="hidden"
@@ -98,16 +109,12 @@ function UploadPhoto() {
               onChange={handleFileSelect}
             />
           </label>
-          {selectedFile && (
-            <p className="mt-4 text-sm text-gray-500">
-              Selected: {selectedFile.name}
-            </p>
-          )}
+          {selectedFile && <p className="mt-4 text-sm text-gray-500">Selected: {selectedFile.name}</p>}
         </div>
 
-        <div className="text-sm text-gray-500 text-center">
-          Supported formats: JPG, PNG, GIF (max 10MB)
-        </div>
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        <div className="text-sm text-gray-500 text-center">Supported formats: JPG, PNG, GIF (max 10MB)</div>
       </div>
     </div>
   );

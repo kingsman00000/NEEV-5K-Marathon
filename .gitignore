@@ -31,3 +31,6 @@ next-env.d.ts
 
 # node
 **/node_modules/
+
+# Photo uploads
+**/uploads/
