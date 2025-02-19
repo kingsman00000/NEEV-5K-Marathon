@@ -1,4 +1,4 @@
-// File: /home/tejax/Projects/NEEV-5K-Marathon/frontend/app/page.tsx
+// File: C:\Users\ASUS\Desktop\mediversal_files\neev-5k-marathon\frontend\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
