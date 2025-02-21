@@ -14,15 +14,16 @@ export default function Page() {
   const [isBibOpen, setIsBibOpen] = useState(false) // ✅ State for BibCreator Modal
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // ✅ State for Mobile Menu
 
-  const carouselImages: string[] = [
-    "/1.jpeg",
-    "/2.jpeg",
-    "/3.jpg",
-    "/5.jpg",
-    "/6.jpg",
-    "/8.jpg",
-    "/9.jpeg",
-  ];
+  const carouselMedia = [
+  { type: "video" as const, src: "/Carousel_5k website.mp4" },
+  {type: "video" as const, src: "/Second_Carousel_5k website.mp4"},
+  { type: "image" as const, src: "/404.jpg" },
+  { type: "image" as const, src: "/606.jpg" },
+  { type: "image" as const, src: "/202.jpg" },
+  { type: "image" as const, src: "/101.jpg" },
+  { type: "image" as const, src: "/505.jpg" },
+  { type: "image" as const, src: "/303.jpg" },
+];
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,7 +39,7 @@ export default function Page() {
                 height={40}
                 className="rounded-full"
               />
-              <h1 className="text-2xl font-bold text-gray-800">NEEV 5K GLOBAL RUN</h1>
+              <h1 className="text-2xl font-bold text-gray-800">NEEV GLOBAL 5K RUN</h1>
             </div>
             <nav className="hidden md:flex space-x-4">
               <a href="#about" className="text-gray-600 hover:text-gray-800">About</a>
@@ -111,23 +112,26 @@ export default function Page() {
      
       {/* Ladkiyaan Bhaage, Sabse Aage CAROUSEL */}
       <main className="space-y-14 pt-8">
-        <section className="relative h-[calc(100vh-80px)] w-full">
-          {/* <Carousel /> */}
-          <CarouselComponent images={carouselImages} />
+      <section className="relative h-[calc(100vh-80px)] w-full rounded-none md:rounded-[50px] overflow-hidden">
+      {/* Carousel Component */}
+      <CarouselComponent media={carouselMedia} />
 
-          
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black bg-opacity-50">
-            <h2 className="text-5xl font-bold mb-4 text-center">Ladkiyaan Bhaage, Sabse Aage</h2>
-            <p className="text-2xl mb-8">8th March, 2025</p>
-            <Button 
-              size="lg" 
-              className="bg-[#A65A3E] hover:bg-[#8B4C34] text-white font-semibold py-2 px-4 rounded-lg"
-              onClick={() => setIsRegisterOpen(true)} // ✅ Open Register Modal
-            >
-              Join the Movement
-            </Button>
-          </div>
-        </section>
+      {/* Dark Overlay with Text & Button */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black bg-opacity-50 px-4">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
+          Ladkiyaan Bhaage, Sabse Aage
+        </h2>
+        <p className="text-xl md:text-2xl mb-8">8th March, 2025</p>
+        <Button 
+          size="lg" 
+          className="bg-[#A65A3E] hover:bg-[#8B4C34] text-white font-semibold py-2 px-4 rounded-lg"
+          aria-label="Join the movement"
+          onClick={() => setIsRegisterOpen(true)} // ✅ Open Register Modal
+        >
+          Join the Movement
+        </Button>
+      </div>
+    </section>
 
         {/* EWTR Section */}
 
@@ -138,7 +142,7 @@ export default function Page() {
         <div className="flex flex-col h-full">
       {/* Title at the Top Left */}
       <h1
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-wide text-black mb-4"
+        className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase tracking-wide text-black mb-4"
         style={{
           fontFamily: "'Montserrat', sans-serif",
           textAlign: "left", // Left-align text
@@ -155,12 +159,12 @@ export default function Page() {
         }}>BRIDGE</span>
       </h1>
 
-      <p className="text-gray-800 text-xl leading-loose mt-2">
+      <p className="text-gray-800 text-3xl leading-loose mt-20">
         Celebrate girls' achievements this International Women's Day! The LBSA 5K honors the inspiring journey of rural girls 
         in Hamari Laado's NEEV program. These girls have dedicated 10 weeks to the program, culminating in a 5K run showcasing 
         their strength and resilience. Join us and witness their triumph!
       </p>
-      <p className="text-gray-800 text-xl leading-loose mt-8">
+      <p className="text-gray-800 text-3xl leading-loose mt-12">
         Run/walk locally or support a NEEV school – help more girls reach their full potential. Join the NEEV 5K!
       </p>
     </div>
@@ -168,14 +172,15 @@ export default function Page() {
 
     {/* Carousel Component inside the section */}
     <div className="w-full max-w-md mx-auto">
-      <CarouselComponent images={[
-        "/404.jpg",
-        "/606.jpg",
-        "/202.jpg",
-        "/101.jpg",
-        "/505.jpg",
-        "/303.jpg",
-      ]} />
+    <CarouselComponent media={[
+      { type: "image", src: "/404.jpg" },
+      { type: "image", src: "/606.jpg" },
+      { type: "image", src: "/202.jpg" },
+      { type: "image", src: "/101.jpg" },
+      { type: "image", src: "/505.jpg" },
+      { type: "image", src: "/303.jpg" },
+    ]} />
+
     </div>
   </div>
 </section>
@@ -231,13 +236,13 @@ export default function Page() {
              {/* <Card className="bg-yellow-200 rounded-2xl shadow-lg p-6 text-center w-80"> */}
                 <CardContent className="flex flex-col items-center">
                   {/* BIB Icon */}
-        <Image
-          src="/number.png" // Replace with actual image path
-          alt="Marathon BIB"
-          width={100}
-          height={100}
-          className="mb-4"
-        />
+                 <Image
+                 src="/number.png" // Replace with actual image path
+                 alt="Marathon BIB"
+                 width={100}
+                 height={100}
+                 className="mb-4"
+                />
                  <h3 className="text-xl font-bold text-black">Grab Your BIB</h3>
                  <p className="text-gray-800 text-sm mt-2">You can download the BIB and get a printout of the same</p>
                   <Button
@@ -255,7 +260,7 @@ export default function Page() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
             <button 
-              className="absolute top-24 right-4 text-gray-600 hover:text-gray-900 text-3xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200"
+              className="absolute top-20 right-4 text-gray-600 hover:text-gray-900 text-3xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200"
               onClick={() => setIsBibOpen(false)}
             >
               ✕

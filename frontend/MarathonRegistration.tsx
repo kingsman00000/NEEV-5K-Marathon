@@ -94,6 +94,10 @@ export default function MarathonRegistration() {
     }
     console.log(formData);
     setLoading(false);
+    
+    // e.preventDefault();
+    // setAlert("Registration successful!");
+    // setIsPopupOpen(true);
   };
 
   return (

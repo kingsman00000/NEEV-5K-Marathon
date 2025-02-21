@@ -1,85 +1,96 @@
-
-import type React from "react"
-import { useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import html2canvas from "html2canvas"
+import type React from "react";
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import html2canvas from "html2canvas";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
 
-
 export default function BibCreator() {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState(""); // Email state
   const [powerWord, setPowerWord] = useState("");
-  const [generatedBib, setGeneratedBib] = useState<{ name: string; powerWord:string; number: number } | null>(null)
-  const [bibNumber, setBibNumber] = useState(1000) // Store BIB number in state
-  const bibRef = useRef<HTMLDivElement>(null)
+  const [generatedBib, setGeneratedBib] = useState<{ full_name: string; powerWord: string; number: number } | null>(null);
+  const bibRef = useRef<HTMLDivElement>(null);
 
-  const generateBib = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (name.trim()) {
-      setBibNumber((prevBib) => {
-        const newBibNumber = prevBib + 1
-        setGeneratedBib({ name,powerWord, number: newBibNumber })
-        // Handle form submission logic here
-        console.log("Participant Name:", name);
-        console.log("Power Word:", powerWord);
-        return newBibNumber
-      })
+  const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email); // Basic email validation
+
+  const generateBib = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim() || !powerWord.trim()) {
+      alert("Please fill all fields.");
+      return;
     }
-  }
+
+    if (!validateEmail(email)) {
+      alert("Enter a valid email address.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://192.168.1.22:5000/generatebib?email=${encodeURIComponent(email)}`);
+      if (!response.ok) throw new Error("Failed to get bib number.");
+
+      const data = await response.json();
+      setGeneratedBib({ full_name: data.full_name, powerWord, number: data.bib_number });
+
+      console.log("Full Name (from Server):", data.full_name);
+      console.log("Email:", email);
+      console.log("Power Word:", powerWord);
+      console.log("Assigned Bib Number:", data.bib_number);
+    } catch (error) {
+      console.error("Error fetching bib number:", error);
+      alert("Error fetching bib number. Please try again.");
+    }
+  };
 
   const downloadBib = () => {
     if (bibRef.current && generatedBib) {
       html2canvas(bibRef.current).then((canvas) => {
-        const link = document.createElement("a")
-        link.download = `NEEV_5K_BIB_${generatedBib.number}.png`
-        link.href = canvas.toDataURL()
-        link.click()
-      })
+        const link = document.createElement("a");
+        link.download = `NEEV_5K_BIB_${generatedBib.number}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
     }
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-4 w-full">
       <h1 className="text-2xl font-bold mb-6 text-center">NEEV 5K BIB Creator</h1>
       <form onSubmit={generateBib} className="space-y-4">
         <div>
-          <Label htmlFor="name" className="font-bold">Participant Name</Label>
+          <Label htmlFor="email" className="font-bold">Registered Email</Label>
           <Input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
             required
           />
         </div>
         <div>
-    <Label htmlFor="powerWord" className="font-bold">Pick A Power Word</Label>
-    <Input
-      id="powerWord"
-      type="text"
-      value={powerWord}
-      onChange={(e) => setPowerWord(e.target.value)}
-      placeholder="Enter your power word"
-      required
-    />
-    <p className="text-sm text-gray-500 mt-2">
-    Pick a power word that starts with the same letter as your name! 
-    For example, if your name is Ahana, you could be Audacious Ahana!
-    </p>
-  </div>
-        <Button type="submit" className="w-full">
-          Generate BIB
-        </Button>
+          <Label htmlFor="powerWord" className="font-bold">Pick A Power Word</Label>
+          <Input
+            id="powerWord"
+            type="text"
+            value={powerWord}
+            onChange={(e) => setPowerWord(e.target.value)}
+            placeholder="Enter your power word"
+            required
+          />
+          <p className="text-sm text-gray-500 mt-2">
+            Pick a power word that starts with the same letter as your name!
+          </p>
+        </div>
+        <Button type="submit" className="w-full">Generate BIB</Button>
       </form>
-      
+
       {generatedBib && (
-        <div className="mt-4">
-          <div className="max-w-md mx-auto p-3">
-          <div ref={bibRef} className="relative bg-[#FFD4C4] p-4 rounded-lg shadow-md text-center">
+        <div className="mt-1 max-w-full mx-auto">
+          <div ref={bibRef} className="relative bg-[#FFD4C4] p-1 rounded-lg shadow-md text-center w-full">
         {/* Top Logos */}
         <div className="flex justify-between items-center mb-4 px-4">
           <div className="w-16 h-16 relative">
@@ -102,7 +113,7 @@ export default function BibCreator() {
           </div>
           <div className="w-16 h-16 relative">
             <Image
-              src="/5k registration page.png?height=64&width=64"
+              src="/5km_logo.png?height=64&width=64"
               alt="5KM Logo"
               width={64}
               height={64}
@@ -120,9 +131,9 @@ export default function BibCreator() {
         </div>
 
         {/* Event Title and Date */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-around">
           <div>
-            <h1 className="text-lg font-bold">7<sup>th</sup>NEEV 5K</h1>
+            <h1 className="text-lg font-bold">7<sup>th</sup>NEEV GLOBAL 5K RUN</h1>
           </div>
           <div className="flex items-center border border-black rounded px-2 py-1">
             <Calendar className="w-4 h-4 mr-1" />
@@ -135,20 +146,17 @@ export default function BibCreator() {
         <h2 className="text-[60px] leading-none font-black">{generatedBib.number}</h2>
         </div>
 
-        {/* Runner Category */}
+        {/* powerWord */}
         <div className="text-center mb-1">
-          <span className="bg-[#E6E6FA] px-4 py-1 rounded-full text-lg font-bold">{generatedBib.powerWord}</span>
+          {/* <span className="bg-[#E6E6FA] px-4 py-1 rounded-full text-base font-bold">{generatedBib.powerWord}</span> */}
+          <h3 className="text-lg font-bold">{generatedBib.powerWord}</h3>
         </div>
 
         {/* Runner Name */}
         <div className="text-center mb-0">
-         <h3 className="text-lg font-bold">{generatedBib.name}</h3>
+         <h3 className="text-lg font-bold">{generatedBib.full_name}</h3>
         </div>
         
-        {/* powerWord */}
-        {/* <div className="text-center mb-0">
-         <h3 className="text-lg">{generatedBib.powerWord}</h3>
-        </div> */}
 
         {/* Bottom Banner Image */}
         <div className="text-center relative mb-1">
@@ -163,9 +171,9 @@ export default function BibCreator() {
         </div>
 
         {/* QR Code Section */}
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-2 flex items-center justify-around">
           <p className="text-xs max-w-[60%]">
-            Scan the QR code to join our group and see the NEEV Global 5k run happening worldwide. Share your
+            Scan the QR code to join our group and see the NEEV Global 5k Run happening worldwide. Share your
             inspirational photos too!
           </p>
           <div className="w-16 h-16 bg-white p-1 rounded">
@@ -178,7 +186,6 @@ export default function BibCreator() {
             />
           </div>
         </div>
-
         {/* Side Text */}
         <div className="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 origin-left">
           <span className="text-sm font-medium">#CelebrateTheGirls</span>
@@ -190,12 +197,11 @@ export default function BibCreator() {
           <span className="text-sm font-medium">#GirlsRun</span>
         </div>
       </div>
-    </div>
           <Button onClick={downloadBib} className="w-full mt-3">
             Download BIB
           </Button>
         </div>
       )}
-    </div>
-  )
+    </div>
+  )
 }
