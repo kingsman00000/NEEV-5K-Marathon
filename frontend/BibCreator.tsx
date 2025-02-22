@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import html2canvas from "html2canvas";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
+import { IP_ADDR} from "./parameters";
 
 export default function BibCreator() {
   const [email, setEmail] = useState(""); // Email state
@@ -29,7 +30,7 @@ export default function BibCreator() {
     }
 
     try {
-      const response = await fetch(`http://192.168.1.22:5000/generatebib?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`${IP_ADDR}/generatebib?email=${encodeURIComponent(email)}`);
       if (!response.ok) throw new Error("Failed to get bib number.");
 
       const data = await response.json();

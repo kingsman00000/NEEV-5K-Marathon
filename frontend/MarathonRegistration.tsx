@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { countries, indianStates } from "./country-data";
-import {IP_ADDR, PORT} from "./parameters";
+import {IP_ADDR} from "./parameters";
 import Popup from "./Popup"; // Importing the popup component
 
 interface FormData {
@@ -74,7 +74,7 @@ export default function MarathonRegistration() {
     setAlert("");
 
     try {
-      const response = await fetch(`http://${IP_ADDR}:${PORT}/register`, {
+      const response = await fetch(`${IP_ADDR}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

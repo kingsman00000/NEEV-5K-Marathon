@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, CheckCircle2, Camera } from 'lucide-react';
+import { IP_ADDR } from './parameters';
 
 function UploadPhoto() {
   const [isDragging, setIsDragging] = useState(false);
@@ -44,7 +45,7 @@ function UploadPhoto() {
     formData.append("image", selectedFile);
 
     try {
-      const response = await fetch("http://192.168.1.22:5000/upload", {
+      const response = await fetch(`${IP_ADDR}/upload`, {
         method: "POST",
         body: formData,
       });
@@ -113,7 +114,10 @@ function UploadPhoto() {
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
           >
             <Upload className="w-10 h-10 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">Drag and drop your photo here, or</p>
+            <p className="text-gray-600 mb-2">Drop your photo here</p>
+            <div className="text-sm text-black text-center font-bold">
+            Supported formats: JPG, PNG, GIF (max 10MB)
+          </div>
             <label className="block w-full">
               <input
                 type="file"
@@ -141,10 +145,6 @@ function UploadPhoto() {
               Upload Photo
             </button>
           )}
-
-          <div className="text-sm text-gray-500 text-center">
-            Supported formats: JPG, PNG, GIF (max 10MB)
-          </div>
         </div>
 
         {/* WhatsApp Scanner Section */}
