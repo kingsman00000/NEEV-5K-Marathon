@@ -159,13 +159,15 @@ export default function Page() {
         }}>BRIDGE</span>
       </h1>
 
-      <p className="text-gray-800 text-3xl leading-loose mt-20">
-        Celebrate girls' achievements this International Women's Day! The LBSA 5K honors the inspiring journey of rural girls 
-        in Hamari Laado's NEEV program. These girls have dedicated 10 weeks to the program, culminating in a 5K run showcasing 
-        their strength and resilience. Join us and witness their triumph!
+      <p className="text-gray-800 text-2xl leading-loose mt-16">
+      This International Women's Day, step into a story of profound transformation! The NEEV program's 10-week 
+      journey culminates in a powerful 5K run, a symbol of change, joy, and incredible strength that the young rural girls have found within them. 
+      Support them transcend limitations, their resilience echoing in every stride, their voices rising with "Ladkiyaan bhaage, sabse aage!". 
       </p>
-      <p className="text-gray-800 text-3xl leading-loose mt-12">
-        Run/walk locally or support a NEEV school – help more girls reach their full potential. Join the NEEV 5K!
+      <p className="text-gray-800 text-2xl leading-loose mt-12">
+      Join the NEEV Global 5K Run, run alongside them from anywhere in the world, and share your 
+      pictures with #celebratethegirls, #girlsrun, #ladkiyaanbhaagesabseaage. Be a catalyst for 
+      change—run and empower girls to write their own destinies.
       </p>
     </div>
 
