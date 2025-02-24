@@ -73,17 +73,17 @@ export default function BibCreator() {
           />
         </div>
         <div>
-          <Label htmlFor="powerWord" className="font-bold">Pick A Power Word</Label>
+          <Label htmlFor="powerWord" className="font-bold">Pick A Positive Word</Label>
           <Input
             id="powerWord"
             type="text"
             value={powerWord}
             onChange={(e) => setPowerWord(e.target.value)}
-            placeholder="Enter your power word"
+            placeholder="Enter your positive word"
             required
           />
           <p className="text-sm text-gray-500 mt-2">
-            Pick a power word that starts with the same letter as your name!
+            Pick a positive word that starts with the same letter as your name!
           </p>
         </div>
         <Button type="submit" className="w-full">Generate BIB</Button>
@@ -161,11 +161,13 @@ export default function BibCreator() {
 
         {/* Bottom Banner Image */}
         <div className="text-center relative mb-1">
-          <div className="h-16 relative">
+          <div className="h-16 flex justify-center items-center pt-4">
             <Image
               src="/2o.svg?height=100&width=400"
               alt="International Women's Day Banner"
-              fill
+              // layout="intrinsic"
+              width={100}
+              height={100}
               className="object-contain"
             />
           </div>

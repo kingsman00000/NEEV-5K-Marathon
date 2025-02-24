@@ -228,6 +228,11 @@ export default function MarathonRegistration() {
           </Button>
         </form>
       </CardContent>
+
+      {/* Footer message added here */}
+      <CardFooter className="text-sm font-bold text-red-600 text-center">
+    Please Don't use the same USERNAME and EMAIL ID Again.
+  </CardFooter>
       {/* Popup Modal */}
       <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
     </Card>
