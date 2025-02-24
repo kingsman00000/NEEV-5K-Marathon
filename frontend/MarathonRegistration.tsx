@@ -74,7 +74,7 @@ export default function MarathonRegistration() {
     setAlert("");
 
     try {
-      const response = await fetch(`${IP_ADDR}/register`, {
+      const response = await fetch(`${IP_ADDR}register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
